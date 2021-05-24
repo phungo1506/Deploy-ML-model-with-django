@@ -1,0 +1,4 @@
+pedestrian
+motor
+car
+bus
