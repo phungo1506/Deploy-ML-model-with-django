@@ -9,7 +9,7 @@ import cv2
 import time
 import numpy as np
 from django.core.files.storage import FileSystemStorage
-
+from database.models import Model_predict
 def home(request):
     return render(request,'home.html')
 def result(request):
@@ -57,8 +57,8 @@ def predictImage(request):
     print('filePathName:',filePathName)
     testimage='.'+filePathName
     print('testimage:',testimage)
-
-
+    img = testimage
+    print("hahahahhahahahah",img)
     image = cv2.imread(testimage)
     print(image.shape)
 
@@ -117,7 +117,11 @@ def predictImage(request):
         h = box[3]
         draw_prediction(image, class_ids[i], confidences[i], round(x), round(y), round(x + w), round(y + h))
     name_img = testimage[:-4] + '_predict.jpg'
+
     cv2.imwrite(name_img, image)
     print('name_img',name_img)
+    img_predict = name_img
+    model = Model_predict(img=img, img_predict = img_predict)
+    model.save()
     context={'filePathName':filePathName,'name_img':name_img}
     return render(request,'index.html',context)
