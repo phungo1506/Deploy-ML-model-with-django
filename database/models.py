@@ -1,5 +1,5 @@
 from django.db import  models
 
-class Todo(models.Model):
-    task = models.CharField(max_length=30)
-    description = models.CharField(max_length=100)
+class Model_predict(models.Model):
+    img = models.CharField(max_length=100000000000)
+    img_predict = models.CharField(max_length=100000000000)

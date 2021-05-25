@@ -50,4 +50,5 @@ for i in files:
         if u == 3:
             img = cv2.rectangle(img, (l, t), (r, b), (0, 255, 255), 3)
             img = cv2.putText(img, 'formula', (l, t-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 255), 2)
+            
     cv2.imwrite(str(i).replace("yolomish-ciou-test/",""),img)
