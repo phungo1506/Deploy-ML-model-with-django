@@ -1,5 +1,7 @@
 import pytest
-def demo1():
-    assert 1 == 5
-def demo2():
-    assert 3 == 5
+
+
+def func(x):
+    return x+5
+def test():
+    assert func(4) == 9
