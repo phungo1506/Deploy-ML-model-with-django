@@ -27,15 +27,15 @@ def test_view(client):
    url = reverse('homepage')
    response = client.get(url)
    assert response.status_code == 200
-@pytest.mark.django_db
-def test_unauthorized(client):
-   url = reverse('predictImage')
-   response = client.get(url)
-   assert response.status_code == 401
-
-
-@pytest.mark.django_db
-def test_superuser_view(admin_client):
-   url = reverse('admin')
-   response = admin_client.get(url)
-   assert response.status_code == 200
+# @pytest.mark.django_db
+# def test_unauthorized(client):
+#    url = reverse('predictImage')
+#    response = client.get(url)
+#    assert response.status_code == 401
+#
+#
+# @pytest.mark.django_db
+# def test_superuser_view(admin_client):
+#    url = reverse('admin')
+#    response = admin_client.get(url)
+#    assert response.status_code == 200
