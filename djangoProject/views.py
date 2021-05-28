@@ -12,14 +12,9 @@ def index(request):
         Arg:
             request:receive request from browser
         Return:
-            render request,'index.html',context
-                (context:
-                    filePathName is name of input image
-                    name_img is name of output image
-                )
+            render request,'index.html'
     """
-    context={'a':1}
-    return render(request,'index.html',context)
+    return render(request,'index.html')
 
 
 def predict(request):
