@@ -8,11 +8,23 @@ from predict import predictImage,get_output_layers
 from database.models import Model_predict
 
 def index(request):
+    """
+        Arg:
+            request:receive request from browser
+        Return:
+            render request,'index.html',context
+    """
     context={'a':1}
     return render(request,'index.html',context)
 
 
 def predict(request):
+    """
+            Arg:
+                request:receive request from browser
+            Return:
+                render request,'index.html',context
+    """
     classes = None
 
     with open('./models/yolov4.txt', 'r') as f:
