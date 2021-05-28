@@ -1,71 +1,30 @@
-from django.http import  HttpResponse
 from django.shortcuts import render
-import joblib
-from sklearn.preprocessing import OneHotEncoder
-#from sklearn.preprocessing import LabelEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.linear_model import LinearRegression
+from django.core.files.storage import FileSystemStorage
 import cv2
 import time
 import numpy as np
-from django.core.files.storage import FileSystemStorage
-from database.models import Model_predict
-def home(request):
-    return render(request,'home.html')
-def result(request):
-    model = joblib.load('gia_nha.sav')
-    list_test = []
-    list_test.append((request.GET['toipham']))
-    list_test.append((request.GET['huyhoach']))
-    list_test.append((request.GET['khongdung']))
-    list_test.append((request.GET['hoboi']))
-    # list_test.append(int(request.GET['luong']))
+from predict import predictImage,get_output_layers
 
-    print(list_test)
-    ans = model.predict([list_test])
-    return render(request,'result.html',{'ans':int(ans[0])*1000})
+from database.models import Model_predict
 
 def index(request):
+    """
+        Arg:
+            request:receive request from browser
+        Return:
+            render request,'index.html',context
+    """
     context={'a':1}
     return render(request,'index.html',context)
 
-def get_output_layers(net):
-    layer_names = net.getLayerNames()
 
-    output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-
-    return output_layers
-
-
-def predictImage(request):
-    def draw_prediction(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
-        label = str(classes[class_id])
-
-        color = COLORS[class_id]
-
-        cv2.rectangle(img, (x, y), (x_plus_w, y_plus_h), color, 2)
-
-        cv2.putText(img, label, (x - 10, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-    print (request)
-    print (request.POST.dict())
-    fileObj=request.FILES['filePath']
-    print('fileObj:',fileObj)
-    fs=FileSystemStorage()
-    filePathName=fs.save(fileObj.name,fileObj)
-    print('filePathName:',filePathName)
-    filePathName=fs.url(filePathName)
-    print('filePathName:',filePathName)
-    testimage='.'+filePathName
-    print('testimage:',testimage)
-    img = testimage
-    print("hahahahhahahahah",img)
-    image = cv2.imread(testimage)
-    print(image.shape)
-
-    Width = image.shape[1]
-    Height = image.shape[0]
-    scale = 0.00392
-
+def predict(request):
+    """
+            Arg:
+                request:receive request from browser
+            Return:
+                render request,'index.html',context
+    """
     classes = None
 
     with open('./models/yolov4.txt', 'r') as f:
@@ -73,13 +32,24 @@ def predictImage(request):
 
     COLORS = np.random.uniform(0, 255, size=(len(classes), 3))
 
+    session = predictImage.predict_Image()
+    testimage = session.get_url_img(request)
+    img = testimage
+
+    image = cv2.imread(testimage)
+
+    Width = image.shape[1]
+    Height = image.shape[0]
+    scale = 0.00392
+
+
     net = cv2.dnn.readNet('./models/yolov4.weights', './models/yolov4.cfg')
 
     blob = cv2.dnn.blobFromImage(image, scale, (416, 416), (0, 0, 0), True, crop=False)
 
     net.setInput(blob)
-
-    outs = net.forward(get_output_layers(net))
+    
+    outs = net.forward(get_output_layers.get_output_layers(net))
 
     class_ids = []
     confidences = []
@@ -115,13 +85,11 @@ def predictImage(request):
         y = box[1]
         w = box[2]
         h = box[3]
-        draw_prediction(image, class_ids[i], confidences[i], round(x), round(y), round(x + w), round(y + h))
+        session.draw_prediction(classes,COLORS,image, class_ids[i], confidences[i], round(x), round(y), round(x + w), round(y + h))
     name_img = testimage[:-4] + '_predict.jpg'
-
     cv2.imwrite(name_img, image)
-    print('name_img',name_img)
     img_predict = name_img
     model = Model_predict(img=img, img_predict = img_predict)
     model.save()
-    context={'filePathName':filePathName,'name_img':name_img}
+    context={'filePathName':testimage[1:],'name_img':name_img}
     return render(request,'index.html',context)
