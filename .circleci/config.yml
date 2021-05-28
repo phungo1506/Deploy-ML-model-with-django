@@ -36,6 +36,6 @@ jobs:
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
-          name: Run tests
+          name: Chạy tests
           # This assumes pytest is installed via the install-package step above
           command: pytest test_case.py
