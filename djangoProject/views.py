@@ -13,6 +13,10 @@ def index(request):
             request:receive request from browser
         Return:
             render request,'index.html',context
+                (context:
+                    filePathName is name of input image
+                    name_img is name of output image
+                )
     """
     context={'a':1}
     return render(request,'index.html',context)
@@ -24,6 +28,10 @@ def predict(request):
                 request:receive request from browser
             Return:
                 render request,'index.html',context
+                (context:
+                    filePathName is name of input image
+                    name_img is name of output image
+                )
     """
     classes = None
 

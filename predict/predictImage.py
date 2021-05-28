@@ -22,7 +22,7 @@ class predict_Image:
                 x_plus_w: x + width
                 y_plus_h: y + height
             Return
-                image has been drawn bounding box
+                the image has been drawn bounding box after prediction
         """
         label = str(classes[class_id])
 
@@ -37,7 +37,7 @@ class predict_Image:
             Arg:
                 request:receive request from browser
             Return:
-                link of image
+                link of input image use preidct
         """
         fileObj=request.FILES['filePath']
         fs=FileSystemStorage()
@@ -52,6 +52,10 @@ class predict_Image:
                 request:receive request from browser
             Return:
                 render request,'index.html',context
+                (context:
+                    filePathName is name of input image
+                    name_img is name of output image
+                )
         """
         classes = None
 
