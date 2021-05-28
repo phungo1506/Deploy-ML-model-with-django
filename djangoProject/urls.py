@@ -8,8 +8,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('^$',views.index,name='homepage'),
-    # path('',views.home,name='home'),
-    path('result/',views.result,name='result'),
-    url('predictImage',views.predictImage,name='predictImage'),
+    url('predictImage',views.predict,name='predictImage'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
