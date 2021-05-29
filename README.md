@@ -16,7 +16,7 @@ Ngô Minh Phú - 18521243
 Tiếp theo cần có file model. 
 
 Vào thư mục `models` sử dụng link bên trong file `link_model.txt` tải file `
-yolov4.weights` rồi bỏ file đã tải vào thư mục `models`
+yolov4.weights` rồi bỏ file đã tải vào thư mục `models`.
 
 Để chạy Project sử dụng lệnh:
 ```bash
