@@ -38,4 +38,4 @@ jobs:
       - run:
           name: Chạy tests
           # This assumes pytest is installed via the install-package step above
-          command: pytest test_case.py
+          command: pytest test/test_pass-circleci.py
