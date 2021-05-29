@@ -35,8 +35,6 @@ def predict(request):
     testimage = session.get_url_img(request)
     img = testimage
     image = cv2.imread(testimage)
-    Width = image.shape[1]
-    Height = image.shape[0]
     scale = 0.00392
     net = cv2.dnn.readNet('./models/yolov4.weights', './models/yolov4.cfg')
     blob = cv2.dnn.blobFromImage(image, scale, (416, 416), (0, 0, 0), True, crop=False)
@@ -44,11 +42,11 @@ def predict(request):
     outs = net.forward(get_output_layers.get_output_layers(net))
     conf_threshold = 0.5
     nms_threshold = 0.4
-    boxes = session.predict_object(outs,Width,Height)[0]
-    confidences = session.predict_object(outs,Width,Height)[1]
-    class_ids = session.predict_object(outs,Width,Height)[2]
+    boxes = session.predict_object(outs,image)[0]
+    confidences = session.predict_object(outs,image)[1]
+    class_ids = session.predict_object(outs,image)[2]
     indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold) #non maximum suppression
-    image = session.draw_bbox_prediction(indices,COLORS,image,classes,class_ids,boxes,confidences)
+    image = session.draw_bbox_prediction(indices,COLORS,image,classes,class_ids,boxes)
     name_img = testimage[:-4] + '_predict.jpg'
     
     cv2.imwrite(name_img, image)
